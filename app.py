@@ -44,7 +44,9 @@ def get_cmd_line():
 
 
 def main():
-    cli = mnempy.cli.CLI()
+    root_dir = os.path.dirname(__file__)
+    config_dir = os.path.join(root_dir, 'config')
+    cli = mnempy.cli.CLI(config_dir)
 
     line = get_cmd_line()
     if line:

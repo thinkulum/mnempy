@@ -1,4 +1,7 @@
+import os
 import cmd
+from . import config
+from . import controller
 from docopt import docopt, DocoptExit
 
 
@@ -39,12 +42,47 @@ class CLI(cmd.Cmd):
     Class for defining the command interface.
     """
 
-    @docopt_cmd
-    def do_do(self, arg):
-        """Test docopt.
+    def __init__(self, config_dir):
+        super(CLI, self).__init__()
 
-Usage: do <greeting>"""
-        print(arg)
+        # TODO: Get config_paths instead of config_dir from arguments?
+        config_filenames = ['app.ini']
+        config_paths = [os.path.join(config_dir, filename)
+                        for filename in config_filenames]
+        # TODO: Allow config to treat different config sources differently?
+        self.config = config.Config(config_paths)
+
+    @docopt_cmd
+    def do_generate(self, arg):
+        """Perform all the steps needed to create a dictionary from scratch.
+
+        Usage: generate [overwrite]"""
+        c = controller.GenerateCommandController(self.config, arg)
+        c.run()
+
+    @docopt_cmd
+    def do_import(self, arg):
+        """Import a dataset into the app's database.
+
+        Usage: import (wn)"""
+        c = controller.ImportCommandController(self.config, arg)
+        c.run()
+
+    @docopt_cmd
+    def do_query(self, arg):
+        """Import a dataset into the app's database.
+
+        Usage: query (tp)"""
+        c = controller.QueryCommandController(self.config, arg)
+        c.run()
+
+    @docopt_cmd
+    def do_build(self, arg):
+        """Create the dictionary file(s) from the collected data.
+
+        Usage: build"""
+        c = controller.BuildCommandController(self.config, arg)
+        c.run()
 
     def do_q(self, arg):
         """Quit the application."""
