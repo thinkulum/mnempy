@@ -16,6 +16,7 @@ class Config(collections.UserDict):
         self.data = {}
 
         config = ConfigParser()
+        config.optionxform = lambda option: option
 
         for config_path in config_paths:
             config.read(config_path)
@@ -27,3 +28,4 @@ class Config(collections.UserDict):
 
         self.data['general']['working_dir'] = working_dir
         self.data['general']['build_dir'] = os.path.join(working_dir, 'build')
+        self.data['general']['cache_dir'] = os.path.join(working_dir, 'cache')

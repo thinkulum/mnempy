@@ -13,7 +13,8 @@ config = {
     'download_url': '',
     'version': __version__,
     'packages': ['mnempy'],
-    'install_requires': ['docutils', 'pytest', 'docopt'],
+    'install_requires': ['docutils', 'pytest', 'docopt', 'sqlalchemy',
+                         'requests', 'lxml'],
     'tests_require': ['Sphinx>=1.4.1,<2.0.0'],
 }
 
