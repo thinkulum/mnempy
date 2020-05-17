@@ -1,5 +1,8 @@
+import os
 from nltk.corpus import wordnet as wn
-import sqlite3
+from sqlalchemy import create_engine
+import csv
+import codecs
 
 
 class Command(object):
@@ -12,6 +15,7 @@ class Command(object):
         self.arg = arg
 
         self.config = config
+        # self.db = create_engine('sqlite:///{}'.format(db_path))
 
     def set_name(self):
         name_keys = [name_key for name_key in self.arg.keys()
@@ -120,5 +124,19 @@ class BuildCommandController(Command):
     def __init__(self, config, arg):
         super(BuildCommandController, self).__init__(config, arg)
 
+        if '<build_path>' in self.arg:
+            self.build_file_path = self.arg['<build_path>']
+            self.build_dir = os.path.dirname(self.build_file_path)
+        else:
+            self.build_dir = self.config['general']['build_dir']
+            self.build_file_path = os.path.join(self.build_dir, 'mnemdic.csv')
+
     def run(self):
-        pass
+        rows = [['word', 'substitutes']]
+        if not os.path.exists(self.build_dir):
+            os.makedirs(self.build_dir)
+        with codecs.open(
+                self.build_file_path, 'w', encoding='utf-8') as build_file:
+            build_writer = csv.writer(build_file)
+            for row in rows:
+                build_writer.writerow(row)

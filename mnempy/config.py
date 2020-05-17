@@ -9,7 +9,7 @@ class Config(collections.UserDict):
     Class for setting settings.
     """
 
-    def __init__(self, config_paths):
+    def __init__(self, working_dir, config_paths):
         super(Config, self).__init__()
 
         # Set default values.
@@ -24,3 +24,6 @@ class Config(collections.UserDict):
             if section not in self.data:
                 self.data[section] = {}
             self.data[section].update(config[section])
+
+        self.data['general']['working_dir'] = working_dir
+        self.data['general']['build_dir'] = os.path.join(working_dir, 'build')

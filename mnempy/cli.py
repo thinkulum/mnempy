@@ -42,15 +42,16 @@ class CLI(cmd.Cmd):
     Class for defining the command interface.
     """
 
-    def __init__(self, config_dir):
+    def __init__(self, cwd):
         super(CLI, self).__init__()
 
         # TODO: Get config_paths instead of config_dir from arguments?
+        config_dir = os.path.join(cwd, 'config')
         config_filenames = ['app.ini']
         config_paths = [os.path.join(config_dir, filename)
                         for filename in config_filenames]
         # TODO: Allow config to treat different config sources differently?
-        self.config = config.Config(config_paths)
+        self.config = config.Config(cwd, config_paths)
 
     @docopt_cmd
     def do_generate(self, arg):
@@ -80,7 +81,7 @@ class CLI(cmd.Cmd):
     def do_build(self, arg):
         """Create the dictionary file(s) from the collected data.
 
-        Usage: build"""
+        Usage: build [<build_path>]"""
         c = controller.BuildCommandController(self.config, arg)
         c.run()
 

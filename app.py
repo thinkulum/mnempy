@@ -44,9 +44,9 @@ def get_cmd_line():
 
 
 def main():
-    root_dir = os.path.dirname(__file__)
-    config_dir = os.path.join(root_dir, 'config')
-    cli = mnempy.cli.CLI(config_dir)
+    # TODO: Don't pass in the current working directory? Maybe it's okay for
+    # CLI or Config to get it.
+    cli = mnempy.cli.CLI(os.getcwd())
 
     line = get_cmd_line()
     if line:
